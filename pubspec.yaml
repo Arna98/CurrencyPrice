@@ -79,8 +79,8 @@ flutter:
   fonts:
     - family: nazanin
       fonts:
-        - asset: assets/Nazanin-Regular.TTF
-        - asset: assets/Nazanin-Bold.TTF
+        - asset: assets/fonts/Nazanin-Regular.TTF
+        - asset: assets/fonts/Nazanin-Bold.TTF
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

@@ -80,7 +80,10 @@ flutter:
     - family: nazanin
       fonts:
         - asset: assets/fonts/Nazanin-Regular.TTF
+          weight: 300
         - asset: assets/fonts/Nazanin-Bold.TTF
+          weight: 700
+
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

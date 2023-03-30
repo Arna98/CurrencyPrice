@@ -91,7 +91,7 @@ class BodyWidget extends StatelessWidget {
             height: 40,
             width: double.infinity,
             decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 102, 102, 102),
+                color: Color.fromARGB(255, 130, 130, 130),
                 borderRadius: BorderRadius.all(Radius.circular(1000))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

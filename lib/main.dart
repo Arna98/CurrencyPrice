@@ -57,6 +57,38 @@ class HomePage extends StatelessWidget {
             const SizedBox(width: 8)
           ],
         ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(children: [
+            Row(
+              children: [
+                Image.asset("assets/images/question.png"),
+                const SizedBox(width: 8),
+                const Text("نرخ ازاد ارز چیست؟")
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 8, 0, 16),
+              child: Text(
+                  "نرخ ارزها در معاملات نقدی و رایج روزانه است معاملات نقدی معاملاتی هستند که خریدار و فروشنده به محض انجام معامله، ارز و ریال را با هم تبادل می نمایند."),
+            ),
+            Container(
+              height: 40,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 102, 102, 102),
+                  borderRadius: BorderRadius.all(Radius.circular(1000))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: const [
+                  Text("ارز", style: TextStyle(color: Colors.white)),
+                  Text("قیمت", style: TextStyle(color: Colors.white)),
+                  Text("تغییرات", style: TextStyle(color: Colors.white)),
+                ],
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }

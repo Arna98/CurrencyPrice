@@ -129,6 +129,7 @@ class BodyWidget extends StatelessWidget {
                   color: Color.fromARGB(255, 232, 232, 232),
                   borderRadius: BorderRadius.all(Radius.circular(1000))),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
                     height: 50,
@@ -147,6 +148,10 @@ class BodyWidget extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleLarge),
                         )),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(left:26),
+                    child: Text("آخرین بروزرسانی   ${_getTime()}", style: Theme.of(context).textTheme.bodyLarge,),
+                  )
                 ],
               ),
             ),
@@ -155,6 +160,11 @@ class BodyWidget extends StatelessWidget {
       ),
     );
   }
+  
+  String _getTime() {
+    return "13:41";
+  }
+
 }
 
 class ListviewItemSeparator extends StatelessWidget {

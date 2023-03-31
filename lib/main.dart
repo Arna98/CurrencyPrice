@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -113,11 +114,43 @@ class BodyWidget extends StatelessWidget {
                 return ListviewItem(context: context, position: index);
               },
               separatorBuilder: (BuildContext context, int index) {
-                return (index + 1) % 4 == 0 ? const ListviewItemSeparator() : const SizedBox.shrink();
+                return (index + 1) % 4 == 0
+                    ? const ListviewItemSeparator()
+                    : const SizedBox.shrink();
               },
             ),
           ),
-         
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: Container(
+              width: double.infinity,
+              height: 50,
+              decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 232, 232, 232),
+                  borderRadius: BorderRadius.all(Radius.circular(1000))),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: TextButton.icon(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 202, 193, 255)),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(1000)))
+                          ),
+                        ),
+                        onPressed: () {},
+                        icon: const Icon(CupertinoIcons.refresh_bold, color: Colors.black),
+                        label: Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                          child: Text("بروزرسانی",
+                              style: Theme.of(context).textTheme.titleLarge),
+                        )),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ]),
       ),
     );
@@ -134,22 +167,18 @@ class ListviewItemSeparator extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Container(
-        width: double.infinity,
-        height: 50,
-        decoration: const BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.all(Radius.circular(1000)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              blurRadius: 1.0,
-              color: Colors.grey
-            )
-          ]
-        ),
-        child: Center(
-          child: Text("تبلیغات", style: Theme.of(context).textTheme.bodyLarge),
-        )
-      ),
+          width: double.infinity,
+          height: 50,
+          decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.all(Radius.circular(1000)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(blurRadius: 1.0, color: Colors.grey)
+              ]),
+          child: Center(
+            child:
+                Text("تبلیغات", style: Theme.of(context).textTheme.bodyLarge),
+          )),
     );
   }
 }

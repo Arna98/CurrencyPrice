@@ -120,6 +120,7 @@ class BodyWidget extends StatelessWidget {
               },
             ),
           ),
+          // Update Button Box
           Padding(
             padding: const EdgeInsets.only(top: 16),
             child: Container(
@@ -164,7 +165,6 @@ class BodyWidget extends StatelessWidget {
   String _getTime() {
     return "13:41";
   }
-
 }
 
 class ListviewItemSeparator extends StatelessWidget {
@@ -227,4 +227,10 @@ class ListviewItem extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showSnackBar(BuildContext context, String msg){
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(msg, style: Theme.of(context).textTheme.titleLarge), backgroundColor: Colors.green)
+  );
 }

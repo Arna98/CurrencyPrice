@@ -106,14 +106,49 @@ class BodyWidget extends StatelessWidget {
           SizedBox(
             height: 350,
             width: double.infinity,
-            child: ListView.builder(
+            child: ListView.separated(
               physics: const BouncingScrollPhysics(),
-                itemCount: 20,
-                itemBuilder: (BuildContext context, int position) {
-                  return ListviewItem(context: context, position: position);
-                }),
-          )
+              itemCount: 20,
+              itemBuilder: (BuildContext context, int index) {
+                return ListviewItem(context: context, position: index);
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return (index + 1) % 4 == 0 ? const ListviewItemSeparator() : const SizedBox.shrink();
+              },
+            ),
+          ),
+         
         ]),
+      ),
+    );
+  }
+}
+
+class ListviewItemSeparator extends StatelessWidget {
+  const ListviewItemSeparator({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Container(
+        width: double.infinity,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.all(Radius.circular(1000)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              blurRadius: 1.0,
+              color: Colors.grey
+            )
+          ]
+        ),
+        child: Center(
+          child: Text("تبلیغات", style: Theme.of(context).textTheme.bodyLarge),
+        )
       ),
     );
   }
@@ -123,7 +158,8 @@ class ListviewItem extends StatelessWidget {
   late BuildContext _context;
   late int _position;
 
-  ListviewItem({required BuildContext context, required int position, super.key}){
+  ListviewItem(
+      {required BuildContext context, required int position, super.key}) {
     this._context = context;
     this._position = position;
   }
@@ -136,15 +172,11 @@ class ListviewItem extends StatelessWidget {
         width: double.infinity,
         height: 50,
         decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(1000)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              blurRadius: 1.0,
-              color: Colors.grey
-            )
-          ]
-        ),
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(1000)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(blurRadius: 1.0, color: Colors.grey)
+            ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

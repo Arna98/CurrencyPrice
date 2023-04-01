@@ -1,6 +1,9 @@
+import 'package:currencyprice/DataModels/CurrencyDataModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 void main() {
   runApp(HomePage());
@@ -40,18 +43,50 @@ class HomePage extends StatelessWidget {
                   color: Colors.black,
                   fontFamily: 'nazanin',
                   fontWeight: FontWeight.w300))),
-      home: const BodyWidget(),
+      home: BodyWidget(),
     );
   }
 }
 
-class BodyWidget extends StatelessWidget {
-  const BodyWidget({
+class BodyWidget extends StatefulWidget {
+  BodyWidget({
     super.key,
   });
 
   @override
+  State<BodyWidget> createState() => _BodyWidgetState();
+}
+
+class _BodyWidgetState extends State<BodyWidget> {
+  List<CurrencyDataModel> _currencyList = [];
+
+  _getResponse() {
+    if (_currencyList.isEmpty) {
+      var url =
+          "https://sasansafari.com/flutter/api.php?access_key=flutter123456";
+      http.get(Uri.parse(url)).then((value) {
+        if (value.statusCode == 200) {
+          List jsonList = convert.jsonDecode(value.body);
+          setState(() {
+            for (int count = 0; count < jsonList.length; count++) {
+              CurrencyDataModel currencyDataModel = CurrencyDataModel();
+              currencyDataModel.setId = jsonList[count]['id'];
+              currencyDataModel.setTitle = jsonList[count]['title'];
+              currencyDataModel.setPrice = jsonList[count]['price'];
+              currencyDataModel.setChanges = jsonList[count]['changes'];
+              currencyDataModel.setStatus = jsonList[count]['status'];
+              _currencyList.add(currencyDataModel);
+            }
+          });
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _getResponse();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -73,6 +108,7 @@ class BodyWidget extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
+          //child 1
           Row(
             children: [
               Image.asset("assets/images/question.png"),
@@ -81,6 +117,7 @@ class BodyWidget extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge)
             ],
           ),
+          //child 2
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 16),
             child: Text(
@@ -88,6 +125,7 @@ class BodyWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
+          //child 3
           Container(
             height: 40,
             width: double.infinity,
@@ -103,15 +141,16 @@ class BodyWidget extends StatelessWidget {
               ],
             ),
           ),
-          //listview
+          //child 4 : listview
           SizedBox(
             height: 350,
             width: double.infinity,
             child: ListView.separated(
               physics: const BouncingScrollPhysics(),
-              itemCount: 20,
+              itemCount: _currencyList.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListviewItem(context: context, position: index);
+                return ListviewItem(
+                    currencyList: _currencyList, position: index);
               },
               separatorBuilder: (BuildContext context, int index) {
                 return (index + 1) % 4 == 0
@@ -120,7 +159,7 @@ class BodyWidget extends StatelessWidget {
               },
             ),
           ),
-          // Update Button Box
+          //child 5 : Update Button Box
           Padding(
             padding: const EdgeInsets.only(top: 16),
             child: Container(
@@ -136,13 +175,17 @@ class BodyWidget extends StatelessWidget {
                     height: 50,
                     child: TextButton.icon(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 202, 193, 255)),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(1000)))
-                          ),
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color.fromARGB(255, 202, 193, 255)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(1000)))),
                         ),
                         onPressed: () {},
-                        icon: const Icon(CupertinoIcons.refresh_bold, color: Colors.black),
+                        icon: const Icon(CupertinoIcons.refresh_bold,
+                            color: Colors.black),
                         label: Padding(
                           padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                           child: Text("بروزرسانی",
@@ -150,8 +193,11 @@ class BodyWidget extends StatelessWidget {
                         )),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left:26),
-                    child: Text("آخرین بروزرسانی   ${_getTime()}", style: Theme.of(context).textTheme.bodyLarge,),
+                    padding: const EdgeInsets.only(left: 26),
+                    child: Text(
+                      "آخرین بروزرسانی   ${_getTime()}",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   )
                 ],
               ),
@@ -161,7 +207,7 @@ class BodyWidget extends StatelessWidget {
       ),
     );
   }
-  
+
   String _getTime() {
     return "13:41";
   }
@@ -194,12 +240,14 @@ class ListviewItemSeparator extends StatelessWidget {
 }
 
 class ListviewItem extends StatelessWidget {
-  late BuildContext _context;
+  late List<CurrencyDataModel> _currencyList;
   late int _position;
 
   ListviewItem(
-      {required BuildContext context, required int position, super.key}) {
-    this._context = context;
+      {required List<CurrencyDataModel> currencyList,
+      required int position,
+      super.key}) {
+    this._currencyList = currencyList;
     this._position = position;
   }
 
@@ -219,9 +267,20 @@ class ListviewItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text("دلار", style: Theme.of(context).textTheme.bodyLarge),
-            Text("46000R", style: Theme.of(context).textTheme.bodyLarge),
-            Text("+200", style: Theme.of(context).textTheme.bodyLarge)
+            Text(_currencyList[_position].getTitle!,
+                style: Theme.of(context).textTheme.bodyLarge),
+            Text(_currencyList[_position].getPrice!,
+                style: Theme.of(context).textTheme.bodyLarge),
+            Text(_currencyList[_position].getChanges!,
+                style: _currencyList[_position].getStatus! == "p"
+                    ? Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .apply(color: Colors.green)
+                    : Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .apply(color: Colors.red))
           ],
         ),
       ),
@@ -229,8 +288,8 @@ class ListviewItem extends StatelessWidget {
   }
 }
 
-void _showSnackBar(BuildContext context, String msg){
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(msg, style: Theme.of(context).textTheme.titleLarge), backgroundColor: Colors.green)
-  );
+void _showSnackBar(BuildContext context, String msg) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(msg, style: Theme.of(context).textTheme.titleLarge),
+      backgroundColor: Colors.green));
 }

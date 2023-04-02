@@ -61,6 +61,7 @@ class BodyWidget extends StatefulWidget {
 class _BodyWidgetState extends State<BodyWidget> {
   // ignore: prefer_final_fields
   List<CurrencyDataModel> _currencyList = [];
+   bool? _status;
 
   Future _getResponse() async {
     if (_currencyList.isEmpty) {
@@ -81,6 +82,11 @@ class _BodyWidgetState extends State<BodyWidget> {
             _currencyList.add(currencyDataModel);
           }
         });
+        if(_status!){
+          if (context.mounted){
+          _showSnackBar(context: context, msg: "بروزرسانی با موفقیت انجام شد.");
+          }
+        }
       }
       return value;
     }else{
@@ -91,6 +97,7 @@ class _BodyWidgetState extends State<BodyWidget> {
   @override
   void initState() {
     super.initState();
+    _status = false;
   }
 
   @override
@@ -179,7 +186,11 @@ class _BodyWidgetState extends State<BodyWidget> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(1000)))),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _status = true;
+                          _currencyList.clear();
+                          _futureBuilderList();
+                        },
                         icon: const Icon(CupertinoIcons.refresh_bold,
                             color: Colors.black),
                         label: Padding(
@@ -308,7 +319,7 @@ class ListviewItem extends StatelessWidget {
   }
 }
 
-void _showSnackBar(BuildContext context, String msg) {
+void _showSnackBar({required BuildContext context,required String msg}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg, style: Theme.of(context).textTheme.titleLarge),
       backgroundColor: Colors.green));

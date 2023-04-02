@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'dart:developer' as developer;
 
 void main() {
   runApp(HomePage());
@@ -49,7 +50,7 @@ class HomePage extends StatelessWidget {
 }
 
 class BodyWidget extends StatefulWidget {
-  BodyWidget({
+  const BodyWidget({
     super.key,
   });
 
@@ -58,10 +59,12 @@ class BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
+  // ignore: prefer_final_fields
   List<CurrencyDataModel> _currencyList = [];
 
   _getResponse() {
     if (_currencyList.isEmpty) {
+      developer.log("getResponse", name: "wLifeCycle");
       var url =
           "https://sasansafari.com/flutter/api.php?access_key=flutter123456";
       http.get(Uri.parse(url)).then((value) {
@@ -84,9 +87,13 @@ class _BodyWidgetState extends State<BodyWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     _getResponse();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -209,6 +216,7 @@ class _BodyWidgetState extends State<BodyWidget> {
   }
 
   String _getTime() {
+    developer.log("getTime", name: "wLifeCycle");
     return "13:41";
   }
 }

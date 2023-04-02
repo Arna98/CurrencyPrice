@@ -153,26 +153,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           SizedBox(
             height: 350,
             width: double.infinity,
-            child: FutureBuilder(
-              future: _getResponse(),
-              builder: (context, snapshot) {
-                return snapshot.hasData
-                    ? ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: _currencyList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListviewItem(
-                              currencyList: _currencyList, position: index);
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return (index + 1) % 4 == 0
-                              ? const ListviewItemSeparator()
-                              : const SizedBox.shrink();
-                        },
-                      )
-                    : const Center(child: CircularProgressIndicator());
-              },
-            ),
+            child: _futureBuilderList(),
           ),
           //child 5 : Update Button Box
           Padding(
@@ -221,6 +202,29 @@ class _BodyWidgetState extends State<BodyWidget> {
         ]),
       ),
     );
+  }
+
+  FutureBuilder<dynamic> _futureBuilderList() {
+    return FutureBuilder(
+            future: _getResponse(),
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: _currencyList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListviewItem(
+                            currencyList: _currencyList, position: index);
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return (index + 1) % 4 == 0
+                            ? const ListviewItemSeparator()
+                            : const SizedBox.shrink();
+                      },
+                    )
+                  : const Center(child: CircularProgressIndicator());
+            },
+          );
   }
 
   String _getTime() {

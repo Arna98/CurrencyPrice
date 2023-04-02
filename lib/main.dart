@@ -62,34 +62,35 @@ class _BodyWidgetState extends State<BodyWidget> {
   // ignore: prefer_final_fields
   List<CurrencyDataModel> _currencyList = [];
 
-  _getResponse() {
+  Future _getResponse() async {
     if (_currencyList.isEmpty) {
       developer.log("getResponse", name: "wLifeCycle");
       var url =
           "https://sasansafari.com/flutter/api.php?access_key=flutter123456";
-      http.get(Uri.parse(url)).then((value) {
-        if (value.statusCode == 200) {
-          List jsonList = convert.jsonDecode(value.body);
-          setState(() {
-            for (int count = 0; count < jsonList.length; count++) {
-              CurrencyDataModel currencyDataModel = CurrencyDataModel();
-              currencyDataModel.setId = jsonList[count]['id'];
-              currencyDataModel.setTitle = jsonList[count]['title'];
-              currencyDataModel.setPrice = jsonList[count]['price'];
-              currencyDataModel.setChanges = jsonList[count]['changes'];
-              currencyDataModel.setStatus = jsonList[count]['status'];
-              _currencyList.add(currencyDataModel);
-            }
-          });
-        }
-      });
+      var value = await http.get(Uri.parse(url));
+      if (value.statusCode == 200) {
+        List jsonList = convert.jsonDecode(value.body);
+        setState(() {
+          for (int count = 0; count < jsonList.length; count++) {
+            CurrencyDataModel currencyDataModel = CurrencyDataModel();
+            currencyDataModel.setId = jsonList[count]['id'];
+            currencyDataModel.setTitle = jsonList[count]['title'];
+            currencyDataModel.setPrice = jsonList[count]['price'];
+            currencyDataModel.setChanges = jsonList[count]['changes'];
+            currencyDataModel.setStatus = jsonList[count]['status'];
+            _currencyList.add(currencyDataModel);
+          }
+        });
+      }
+      return value;
+    }else{
+      return _currencyList;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _getResponse();
   }
 
   @override
@@ -152,17 +153,24 @@ class _BodyWidgetState extends State<BodyWidget> {
           SizedBox(
             height: 350,
             width: double.infinity,
-            child: ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              itemCount: _currencyList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListviewItem(
-                    currencyList: _currencyList, position: index);
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return (index + 1) % 4 == 0
-                    ? const ListviewItemSeparator()
-                    : const SizedBox.shrink();
+            child: FutureBuilder(
+              future: _getResponse(),
+              builder: (context, snapshot) {
+                return snapshot.hasData
+                    ? ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: _currencyList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListviewItem(
+                              currencyList: _currencyList, position: index);
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return (index + 1) % 4 == 0
+                              ? const ListviewItemSeparator()
+                              : const SizedBox.shrink();
+                        },
+                      )
+                    : const Center(child: CircularProgressIndicator());
               },
             ),
           ),

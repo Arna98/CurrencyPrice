@@ -83,9 +83,8 @@ class _BodyWidgetState extends State<BodyWidget> {
           }
         });
         if(_status!){
-          if (context.mounted){
+          if (!mounted) return;
           _showSnackBar(context: context, msg: "بروزرسانی با موفقیت انجام شد.");
-          }
         }
       }
       return value;

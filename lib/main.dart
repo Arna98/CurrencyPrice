@@ -63,7 +63,7 @@ class BodyWidget extends StatefulWidget {
 class _BodyWidgetState extends State<BodyWidget> {
   // ignore: prefer_final_fields
   List<CurrencyDataModel> _currencyList = [];
-   bool? _status;
+  bool? _status;
 
   Future _getResponse() async {
     if (_currencyList.isEmpty) {
@@ -84,13 +84,13 @@ class _BodyWidgetState extends State<BodyWidget> {
             _currencyList.add(currencyDataModel);
           }
         });
-        if(_status!){
+        if (_status!) {
           if (!mounted) return;
           _showSnackBar(context: context, msg: "بروزرسانی با موفقیت انجام شد.");
         }
       }
       return value;
-    }else{
+    } else {
       return _currencyList;
     }
   }
@@ -143,7 +143,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           ),
           //child 3
           Container(
-            height: 40,
+            height: MediaQuery.of(context).size.height / 17,
             width: double.infinity,
             decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 130, 130, 130),
@@ -159,7 +159,7 @@ class _BodyWidgetState extends State<BodyWidget> {
           ),
           //child 4 : listview
           SizedBox(
-            height: 350,
+            height: MediaQuery.of(context).size.height / 2,
             width: double.infinity,
             child: _futureBuilderList(),
           ),
@@ -168,7 +168,7 @@ class _BodyWidgetState extends State<BodyWidget> {
             padding: const EdgeInsets.only(top: 16),
             child: Container(
               width: double.infinity,
-              height: 50,
+              height: MediaQuery.of(context).size.height / 16,
               decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 232, 232, 232),
                   borderRadius: BorderRadius.all(Radius.circular(1000))),
@@ -176,7 +176,7 @@ class _BodyWidgetState extends State<BodyWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    height: 50,
+                    height: MediaQuery.of(context).size.height / 16,
                     child: TextButton.icon(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
@@ -218,25 +218,25 @@ class _BodyWidgetState extends State<BodyWidget> {
 
   FutureBuilder<dynamic> _futureBuilderList() {
     return FutureBuilder(
-            future: _getResponse(),
-            builder: (context, snapshot) {
-              return snapshot.hasData
-                  ? ListView.separated(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: _currencyList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListviewItem(
-                            currencyList: _currencyList, position: index);
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return (index + 1) % 4 == 0
-                            ? const ListviewItemSeparator()
-                            : const SizedBox.shrink();
-                      },
-                    )
-                  : const Center(child: CircularProgressIndicator());
-            },
-          );
+      future: _getResponse(),
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                itemCount: _currencyList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListviewItem(
+                      currencyList: _currencyList, position: index);
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return (index + 1) % 4 == 0
+                      ? const ListviewItemSeparator()
+                      : const SizedBox.shrink();
+                },
+              )
+            : const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 
   String _getTime() {
@@ -321,7 +321,7 @@ class ListviewItem extends StatelessWidget {
   }
 }
 
-void _showSnackBar({required BuildContext context,required String msg}) {
+void _showSnackBar({required BuildContext context, required String msg}) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg, style: Theme.of(context).textTheme.titleLarge),
       backgroundColor: Colors.green));

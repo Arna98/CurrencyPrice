@@ -85,6 +85,13 @@ flutter:
         - asset: assets/fonts/Nazanin-Bold.TTF
           weight: 700
 
+    - family: yagut
+      fonts:
+        - asset: assets/fonts/Yagut-Regular.TTF
+          weight: 300
+        - asset: assets/fonts/Yagut-Bold.TTF
+          weight: 700
+
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

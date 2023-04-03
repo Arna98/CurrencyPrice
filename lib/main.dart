@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'dart:developer' as developer;
 
+import 'package:intl/intl.dart';
+
 void main() {
   runApp(HomePage());
 }
@@ -239,7 +241,8 @@ class _BodyWidgetState extends State<BodyWidget> {
 
   String _getTime() {
     developer.log("getTime", name: "wLifeCycle");
-    return "13:41";
+    DateTime dateTime = DateTime.now();
+    return DateFormat("kk:mm:ss").format(dateTime);
   }
 }
 
